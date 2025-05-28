@@ -306,12 +306,13 @@ int main ()
           * TODO (step 3): compute the steer error (error_steer) from the position and the desired trajectory
           **/
            //error_steer = 0;
-             double trajectory_yaw;
+             double trajectory_yaw, delta_S;
              trajectory_yaw = angle_between_points(x_position, y_position, x_points.back(), y_points.back());
              //error_steer = yaw - trajectory_yaw;
              alpha = yaw - trajectory_yaw;
              ld = std::sqrt(std::pow(x_position-x_points.back(),2) + std::pow(y_position-y_points.back(),2));
              error_steer = ld*std::sin(alpha);
+             delta_s = std::atan2(6*std::sin(alpha),ld);
              //std::cout<<x_points<<std::endl;
             //std::cout<<y_points<<std::endl;
             //std::cout<<yaw<<std::endl;
