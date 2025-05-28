@@ -308,13 +308,14 @@ int main ()
            //error_steer = 0;
              double trajectory_yaw, delta_s;
              trajectory_yaw = angle_between_points(x_position, y_position, x_points.back(), y_points.back());
-             error_steer = yaw - trajectory_yaw;
+             //error_steer = yaw - trajectory_yaw;
              alpha = yaw - trajectory_yaw;
              ld = std::sqrt(std::pow(x_position-x_points.back(),2) + std::pow(y_position-y_points.back(),2));
              //error_steer = ld*std::sin(alpha);
              delta_s = std::atan2(6*std::sin(alpha),ld);
-             std::cout<<"cte_new: "<< ld*std::sin(alpha) << std::endl;
-             std::cout<<"delta_steer: "<< delta_s << std::endl;
+             error_steer = delta_s;
+             //std::cout<<"cte_new: "<< ld*std::sin(alpha) << std::endl;
+             //std::cout<<"delta_steer: "<< delta_s << std::endl;
              //std::cout<<x_points<<std::endl;
             //std::cout<<y_points<<std::endl;
             //std::cout<<yaw<<std::endl;
