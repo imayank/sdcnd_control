@@ -227,9 +227,10 @@ int main ()
 
   PID pid_steer = PID();
   PID pid_throttle = PID();
-
-  pid_steer.Init(0.23, 0.034, 0.9, 1.2, -1.2,true); // (0.08,0.06,0.01), (0.08,0.04,0.009), (0.08, 0.04, 0.5)
-  pid_throttle.Init(0.06, 0.016, 0.005, 1, -1, false);
+  
+  // Initialize the coefficients
+  pid_steer.Init(1.0, 0.2, 5.0, 1.2, -1.2); 
+  pid_throttle.Init(0.06, 0.016, 0.005, 1, -1);
 
   h.onMessage([&pid_steer, &pid_throttle, &new_delta_time, &timer, &prev_timer, &i, &prev_timer](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode)
   {
@@ -307,19 +308,18 @@ int main ()
           **/
            //error_steer = 0;
              double trajectory_yaw, delta_s;
+
+             // calculate angle between current position and trajectory  
              trajectory_yaw = angle_between_points(x_position, y_position, x_points.back(), y_points.back());
-             //error_steer = yaw - trajectory_yaw;
+             // difference between current heading and required heading
              alpha = yaw - trajectory_yaw;
+             //distance between current position and the start of the trajectory
              ld = std::sqrt(std::pow(x_position-x_points.back(),2) + std::pow(y_position-y_points.back(),2));
-             //error_steer = ld*std::sin(alpha);
+             //steering angle required proportional to alpha. distance beteen front and back axle is supposed to 
+             // 6 meters. tan(delta_steer) = (L * alpha) /ld 
              delta_s = std::atan2(6*std::sin(alpha),ld);
              error_steer = delta_s;
-             //std::cout<<"cte_new: "<< ld*std::sin(alpha) << std::endl;
-             //std::cout<<"delta_steer: "<< delta_s << std::endl;
-             //std::cout<<x_points<<std::endl;
-            //std::cout<<y_points<<std::endl;
-            //std::cout<<yaw<<std::endl;
-            //std::cout<<trajectory_yaw<<std::endl;
+             
           /**
           * TODO (step 3): uncomment these lines
           **/
@@ -356,6 +356,8 @@ int main ()
           **/
           // modify the following line for step 2
           error_throttle = 0;
+          //  simple error calculating the difference between current velocity. the control requires
+          // to achieve desired velocity, so the difference is the simple choice. 
           delta_val = (velocity - v_points.back());
           error_throttle = delta_val;
 

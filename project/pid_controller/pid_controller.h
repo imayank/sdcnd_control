@@ -13,14 +13,13 @@ public:
    /**
    * TODO: Create the PID class
    **/
-    bool flag = true;
-    bool f_steer;
+    bool flag = true; // to check if it is the first time controller is used.
     /*
     * Errors
     */
-    float cte;
-    float prev_cte,diff_cte;
-    float cum_cte;
+    float cte;               //cross track error
+    float prev_cte,diff_cte; // previous cross track error and derivative error
+    float cum_cte;           // integral error
     /*
     * Coefficients
     */
@@ -46,7 +45,7 @@ public:
     /*
     * Initialize PID.
     */
-    void Init(double Kp, double Ki, double Kd, double output_lim_max, double output_lim_min, bool steer_flag);
+    void Init(double Kp, double Ki, double Kd, double output_lim_max, double output_lim_min);
 
     /*
     * Update the PID error variables given cross track error.
